@@ -24,8 +24,12 @@ defmodule Dicect.Lab.Breathless do
     [{Die.new(sides), 2}]
   end
 
+  defp make_dice(12 = _sides, :good) do
+    [{Die.new(20), 1}]
+  end
+
   defp make_dice(sides, :good) do
-    [{Die.new(sides + 1), 1}]
+    [{Die.new(sides + 2), 1}]
   end
 
   defp make_dice(sides, :fair) do
@@ -47,13 +51,14 @@ defmodule Dicect.Lab.Breathless do
   defp make_predicates(:fair) do
     [
       fn rolled ->
-        Enum.any?(rolled, fn x -> x >= 5 end)
+        Enum.max(rolled) >= 5
       end,
       fn rolled ->
-        Enum.any?(rolled, fn x -> x >= 3 end) && Enum.all?(rolled, fn x -> x < 5 end)
+        max = Enum.max(rolled)
+        max < 5 && max >= 3
       end,
       fn rolled ->
-        Enum.all?(rolled, fn x -> x < 3 end)
+        Enum.max(rolled) < 3
       end
     ]
   end
@@ -61,16 +66,14 @@ defmodule Dicect.Lab.Breathless do
   defp make_predicates(:bad) do
     [
       fn rolled ->
-        rolled = [Enum.min(rolled)]
-        Enum.any?(rolled, fn x -> x >= 5 end)
+        Enum.min(rolled) >= 5
       end,
       fn rolled ->
-        rolled = [Enum.min(rolled)]
-        Enum.any?(rolled, fn x -> x >= 3 end) && Enum.all?(rolled, fn x -> x < 5 end)
+        min = Enum.min(rolled)
+        min < 5 && min >= 3
       end,
       fn rolled ->
-        rolled = [Enum.min(rolled)]
-        Enum.all?(rolled, fn x -> x < 3 end)
+        Enum.min(rolled) < 3
       end
     ]
   end
