@@ -52,11 +52,16 @@ defmodule Dicect.Combinations do
   """
   @spec produce_combinations(die_count_list()) :: combinations()
   def produce_combinations([{%Die{}, n} | _] = dice) when is_integer(n) and n > 0 do
-    pick_outcomes(dice) |> Support.cross()
+    pick_outcomes(dice)
+    |> Support.cross()
+    |> Enum.map(fn
+      combo when is_list(combo) -> combo
+      outcome -> [outcome]
+    end)
   end
 
   defp pick_outcomes([{%Die{outcomes: outcomes}, n}]) do
-    outcomes |> List.duplicate(n)
+    List.duplicate(outcomes, n)
   end
 
   defp pick_outcomes([{%Die{outcomes: outcomes}, n} | tail]) do

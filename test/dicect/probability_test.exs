@@ -7,6 +7,10 @@ defmodule Dicect.ProbabilityTest do
   defp describe_fixtures do
     [
       %{
+        input: %{dice: [{Die.new(10), 1}], predicates: [fn [a] -> a >= 9 end]},
+        expected: [20]
+      },
+      %{
         input: %{dice: [{Die.new(2), 2}], predicates: [fn [a, b] -> a + b == 2 end]},
         expected: [25]
       },

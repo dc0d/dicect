@@ -8,6 +8,17 @@ defmodule Dicect.CombinationsTest do
 
   describe "Dicect.Combinations.produce_combinations/1" do
     @describe_fixtures %{
+      input: [{Die.new(3), 1}],
+      expected_conds: %{
+        length: 3,
+        at: [
+          %{index: 0, combination: [1]},
+          %{index: 1, combination: [2]},
+          %{index: 2, combination: [3]}
+        ]
+      }
+    }
+    @describe_fixtures %{
       input: [{Die.new(2), 1}, {Die.new(2), 1}],
       expected_conds: %{
         length: 4,

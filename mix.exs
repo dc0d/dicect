@@ -12,7 +12,12 @@ defmodule Dicect.MixProject do
       aliases: aliases(),
       test_coverage: [
         summary: [threshold: 0.0001],
-        ignore_modules: [Dicect.Application]
+        ignore_modules: [
+          Dicect.Application,
+          Dicect.Lab.Scale,
+          Dicect.Lab.Breathless,
+          Dicect.Lab.Ironsworn
+        ]
       ]
     ]
   end
