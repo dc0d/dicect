@@ -15,6 +15,8 @@ Mix.install(
 ```elixir
 alias Dicect.Lab.Ironsworn
 alias Dicect.Lab.Breathless
+alias Dicect.Lab.BitD
+alias Dicect.Lab.Fate
 
 alias VegaLite, as: Vl
 alias Kino.VegaLite, as: KV
@@ -326,4 +328,120 @@ chart =
   |> KV.render()
 
 KV.push_many(chart, d12 ++ d12_bad ++ d12_good ++ d12_excellent)
+```
+
+## BitD
+
+```elixir
+bitd_1d6 =
+  BitD.roll(count: 1)
+  |> Enum.map(fn %{p: p, r: r} -> %{p_1: p, r_1: r} end)
+
+bitd_2d6 =
+  BitD.roll(count: 2)
+  |> Enum.map(fn %{p: p, r: r} -> %{p_2: p, r_2: r} end)
+
+bitd_3d6 =
+  BitD.roll(count: 3)
+  |> Enum.map(fn %{p: p, r: r} -> %{p_3: p, r_3: r} end)
+
+bitd_4d6 =
+  BitD.roll(count: 4)
+  |> Enum.map(fn %{p: p, r: r} -> %{p_4: p, r_4: r} end)
+
+bitd_5d6 =
+  BitD.roll(count: 5)
+  |> Enum.map(fn %{p: p, r: r} -> %{p_5: p, r_5: r} end)
+```
+
+```elixir
+chart =
+  Vl.new(width: 400, height: 400, title: "BitD - Pool 1-5")
+  |> Vl.layers([
+    Vl.new()
+    |> Vl.mark(:line, color: "lightgreen")
+    |> Vl.encode_field(:x, "r_1", type: :ordinal)
+    |> Vl.encode_field(:y, "p_1", type: :quantitative),
+    Vl.new()
+    |> Vl.mark(:line, color: "green")
+    |> Vl.encode_field(:x, "r_2", type: :ordinal)
+    |> Vl.encode_field(:y, "p_2", type: :quantitative),
+    Vl.new()
+    |> Vl.mark(:line, color: "pink")
+    |> Vl.encode_field(:x, "r_3", type: :ordinal)
+    |> Vl.encode_field(:y, "p_3", type: :quantitative),
+    Vl.new()
+    |> Vl.mark(:line, color: "orange")
+    |> Vl.encode_field(:x, "r_4", type: :ordinal)
+    |> Vl.encode_field(:y, "p_4", type: :quantitative),
+    Vl.new()
+    |> Vl.mark(:line, color: "lightblue")
+    |> Vl.encode_field(:x, "r_5", type: :ordinal)
+    |> Vl.encode_field(:y, "p_5", type: :quantitative)
+  ])
+  |> KV.render()
+
+KV.push_many(chart, bitd_1d6 ++ bitd_2d6 ++ bitd_3d6 ++ bitd_4d6 ++ bitd_5d6)
+```
+
+## FATE
+
+```elixir
+fate_0 =
+  Fate.roll(skill: 0)
+  |> Enum.map(fn %{p: p, r: r} -> %{p_0: p, r_0: r} end)
+
+fate_1 =
+  Fate.roll(skill: 1)
+  |> Enum.map(fn %{p: p, r: r} -> %{p_1: p, r_1: r} end)
+
+fate_2 =
+  Fate.roll(skill: 2)
+  |> Enum.map(fn %{p: p, r: r} -> %{p_2: p, r_2: r} end)
+
+fate_3 =
+  Fate.roll(skill: 3)
+  |> Enum.map(fn %{p: p, r: r} -> %{p_3: p, r_3: r} end)
+
+fate_4 =
+  Fate.roll(skill: 4)
+  |> Enum.map(fn %{p: p, r: r} -> %{p_4: p, r_4: r} end)
+  
+fate_5 =
+  Fate.roll(skill: 5)
+  |> Enum.map(fn %{p: p, r: r} -> %{p_5: p, r_5: r} end)
+```
+
+```elixir
+chart =
+  Vl.new(width: 400, height: 400, title: "FATE - Skill 0-5")
+  |> Vl.layers([
+    Vl.new()
+    |> Vl.mark(:line, color: "lightgreen")
+    |> Vl.encode_field(:x, "r_0", type: :ordinal)
+    |> Vl.encode_field(:y, "p_0", type: :quantitative),
+    Vl.new()
+    |> Vl.mark(:line, color: "green")
+    |> Vl.encode_field(:x, "r_1", type: :ordinal)
+    |> Vl.encode_field(:y, "p_1", type: :quantitative),
+    Vl.new()
+    |> Vl.mark(:line, color: "pink")
+    |> Vl.encode_field(:x, "r_2", type: :ordinal)
+    |> Vl.encode_field(:y, "p_2", type: :quantitative),
+    Vl.new()
+    |> Vl.mark(:line, color: "orange")
+    |> Vl.encode_field(:x, "r_3", type: :ordinal)
+    |> Vl.encode_field(:y, "p_3", type: :quantitative),
+    Vl.new()
+    |> Vl.mark(:line, color: "blue")
+    |> Vl.encode_field(:x, "r_4", type: :ordinal)
+    |> Vl.encode_field(:y, "p_4", type: :quantitative),
+    Vl.new()
+    |> Vl.mark(:line, color: "lightblue")
+    |> Vl.encode_field(:x, "r_5", type: :ordinal)
+    |> Vl.encode_field(:y, "p_5", type: :quantitative)
+  ])
+  |> KV.render()
+
+KV.push_many(chart, fate_0 ++ fate_1 ++ fate_2 ++ fate_3 ++ fate_4 ++ fate_5)
 ```

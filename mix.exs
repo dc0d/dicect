@@ -16,7 +16,9 @@ defmodule Dicect.MixProject do
           Dicect.Application,
           Dicect.Lab.Scale,
           Dicect.Lab.Breathless,
-          Dicect.Lab.Ironsworn
+          Dicect.Lab.Ironsworn,
+          Dicect.Lab.BitD,
+          Dicect.Lab.Fate
         ]
       ]
     ]
