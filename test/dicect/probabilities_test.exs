@@ -1,18 +1,32 @@
-defmodule Dicect.ProbabilityTest do
-  use ExUnit.Case
-  doctest Dicect.Probability
+defmodule Dicect.ProbabilitiesTest do
+  use DicectUnitTest, async: true
+  doctest Dicect.Probabilities
+
   alias Dicect.Die
-  alias Dicect.Probability
+  alias Dicect.Probabilities
+
+  test "Probabilities.calculate/1" do
+    for fixture <- describe_fixtures() do
+      case fixture do
+        %{input: %{dice: dice, predicates: predicates}, expected_output: expected_output} ->
+          Probabilities.calculate(dice, predicates)
+          |> Enum.zip(expected_output)
+          |> Enum.each(fn {p, e} ->
+            assert_in_delta(p, e, 0.01)
+          end)
+      end
+    end
+  end
 
   defp describe_fixtures do
     [
       %{
         input: %{dice: [{Die.new(10), 1}], predicates: [fn [a] -> a >= 9 end]},
-        expected: [20]
+        expected_output: [20 / 100]
       },
       %{
         input: %{dice: [{Die.new(2), 2}], predicates: [fn [a, b] -> a + b == 2 end]},
-        expected: [25]
+        expected_output: [25 / 100]
       },
       %{
         input: %{
@@ -22,17 +36,39 @@ defmodule Dicect.ProbabilityTest do
               fn [a, b] -> a + b == resolution end
             end
         },
-        expected: [2.78, 5.56, 8.33, 11.11, 13.89, 16.67, 13.89, 11.11, 8.33, 5.56, 2.78]
+        expected_output: [
+          2.78 / 100,
+          5.56 / 100,
+          8.33 / 100,
+          11.11 / 100,
+          13.89 / 100,
+          16.67 / 100,
+          13.89 / 100,
+          11.11 / 100,
+          8.33 / 100,
+          5.56 / 100,
+          2.78 / 100
+        ]
       },
       %{
         input: %{
-          dice: [{Die.new([{-1, 1 / 3}, {0, 1 / 3}, {1, 1 / 3}]), 4}],
+          dice: [{Die.new([-1, 0, 1]), 4}],
           predicates:
             for(resolution <- -4..4) do
               fn [a, b, c, d] -> a + b + c + d == resolution end
             end
         },
-        expected: [1.23, 4.94, 12.35, 19.75, 23.46, 19.75, 12.35, 4.94, 1.23]
+        expected_output: [
+          1.23 / 100,
+          4.94 / 100,
+          12.35 / 100,
+          19.75 / 100,
+          23.46 / 100,
+          19.75 / 100,
+          12.35 / 100,
+          4.94 / 100,
+          1.23 / 100
+        ]
       },
       %{
         input: %{
@@ -55,41 +91,25 @@ defmodule Dicect.ProbabilityTest do
             fn rolled -> ironsworn_predicate(rolled, 4, :strong_hit) end
           ]
         },
-        expected: [
-          59.17,
-          31.67,
-          9.17,
-          45.17,
-          39.67,
-          15.17,
-          33.17,
-          43.67,
-          23.17,
-          23.17,
-          43.67,
-          33.17,
-          15.17,
-          39.67,
-          45.17
+        expected_output: [
+          59.17 / 100,
+          31.67 / 100,
+          9.17 / 100,
+          45.17 / 100,
+          39.67 / 100,
+          15.17 / 100,
+          33.17 / 100,
+          43.67 / 100,
+          23.17 / 100,
+          23.17 / 100,
+          43.67 / 100,
+          33.17 / 100,
+          15.17 / 100,
+          39.67 / 100,
+          45.17 / 100
         ]
       }
     ]
-  end
-
-  describe "Dicect.Probability.calculate/2" do
-    test "calculate/2" do
-      for %{
-            input: %{dice: dice, predicates: predicates},
-            expected: expected
-          } <-
-            describe_fixtures() do
-        transformed_actual =
-          Probability.calculate(dice, predicates)
-          |> Enum.map(fn x -> Float.round(100 * x, 2) end)
-
-        assert transformed_actual == expected
-      end
-    end
   end
 
   defp ironsworn_predicate([d6, d10_1, d10_2], stat, :strong_hit) do

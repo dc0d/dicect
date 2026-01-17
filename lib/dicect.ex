@@ -3,6 +3,10 @@ defmodule Dicect do
   LIBRARY
   """
 
+  def colors do
+    ["green", "pink", "orange", "blue", "red", "lightblue", "lightgreen", "brown", "purple"]
+  end
+
   @spec even?(number()) :: boolean()
   @doc """
   Returns `true` if `n` is even, otherwise returns `false`.

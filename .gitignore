@@ -23,3 +23,5 @@ dicect-*.tar
 /tmp/
 
 /doc/
+
+/.elixir_ls/

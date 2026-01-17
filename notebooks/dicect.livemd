@@ -10,13 +10,12 @@ Mix.install(
 )
 ```
 
-## Shared
+## Load
 
 ```elixir
 alias Dicect.Lab.Ironsworn
-alias Dicect.Lab.Breathless
-alias Dicect.Lab.BitD
 alias Dicect.Lab.Fate
+alias Dicect.Lab.BitD
 
 alias VegaLite, as: Vl
 alias Kino.VegaLite, as: KV
@@ -25,423 +24,38 @@ alias Kino.VegaLite, as: KV
 ## Ironsworn
 
 ```elixir
-iron_0 = 
-  Ironsworn.with_stat(0)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_0: p, r_0: r} end)
+%{data: data, diagrams: diagrams, title: title} = Ironsworn.run()
 
-iron_1 = 
-  Ironsworn.with_stat(1)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_1: p, r_1: r} end)
-  
-iron_2 = 
-  Ironsworn.with_stat(2)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_2: p, r_2: r} end)
-
-iron_3 = 
-  Ironsworn.with_stat(3)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_3: p, r_3: r} end)
-
-iron_4 = 
-  Ironsworn.with_stat(4)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_4: p, r_4: r} end)
-```
-
-```elixir
 chart =
-  Vl.new(width: 400, height: 400, title: "1D6,2D10 & Stats 1 .. 4")
-  |> Vl.layers([
-    Vl.new()
-    |> Vl.mark(:line, color: "lightgreen")
-    |> Vl.encode_field(:x, "r_0", type: :ordinal)
-    |> Vl.encode_field(:y, "p_0", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "green")
-    |> Vl.encode_field(:x, "r_1", type: :ordinal)
-    |> Vl.encode_field(:y, "p_1", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "pink")
-    |> Vl.encode_field(:x, "r_2", type: :ordinal)
-    |> Vl.encode_field(:y, "p_2", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "orange")
-    |> Vl.encode_field(:x, "r_3", type: :ordinal)
-    |> Vl.encode_field(:y, "p_3", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "red")
-    |> Vl.encode_field(:x, "r_4", type: :ordinal)
-    |> Vl.encode_field(:y, "p_4", type: :quantitative)
-  ])
+  Vl.new(width: 700, height: 400, title: title)
+  |> Vl.layers(diagrams)
   |> KV.render()
 
-KV.push_many(chart, iron_0 ++ iron_1 ++ iron_2 ++ iron_3 ++ iron_4)
-```
-
-## Breathless
-
-```elixir
-d4 = 
-  Breathless.roll(4)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_0: p, r_0: r} end)
-
-d6 = 
-  Breathless.roll(6)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_1: p, r_1: r} end)
-
-d8 = 
-  Breathless.roll(8)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_2: p, r_2: r} end)
-
-d10 = 
-  Breathless.roll(10)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_3: p, r_3: r} end)
-
-d12 = 
-  Breathless.roll(12)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_4: p, r_4: r} end)
-```
-
-```elixir
-chart =
-  Vl.new(width: 400, height: 400, title: "D4 .. D12")
-  |> Vl.layers([
-    Vl.new()
-    |> Vl.mark(:line, color: "lightgreen")
-    |> Vl.encode_field(:x, "r_0", type: :ordinal)
-    |> Vl.encode_field(:y, "p_0", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "green")
-    |> Vl.encode_field(:x, "r_1", type: :ordinal)
-    |> Vl.encode_field(:y, "p_1", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "pink")
-    |> Vl.encode_field(:x, "r_2", type: :ordinal)
-    |> Vl.encode_field(:y, "p_2", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "orange")
-    |> Vl.encode_field(:x, "r_3", type: :ordinal)
-    |> Vl.encode_field(:y, "p_3", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "red")
-    |> Vl.encode_field(:x, "r_4", type: :ordinal)
-    |> Vl.encode_field(:y, "p_4", type: :quantitative)
-  ])
-  |> KV.render()
-
-KV.push_many(chart, d4 ++ d6 ++ d8 ++ d10 ++ d12)
-```
-
-```elixir
-d4_excellent =
-  Breathless.roll(4, position: :excellent)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_03: p, r_03: r} end)
-
-d4_good =
-  Breathless.roll(4, position: :good)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_02: p, r_02: r} end)
-
-d4_bad =
-  Breathless.roll(4, position: :bad)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_01: p, r_01: r} end)
-```
-
-```elixir
-chart =
-  Vl.new(width: 400, height: 400, title: "D4 & Positions")
-  |> Vl.layers([
-    Vl.new()
-    |> Vl.mark(:line, color: "lightgreen")
-    |> Vl.encode_field(:x, "r_0", type: :ordinal)
-    |> Vl.encode_field(:y, "p_0", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "green")
-    |> Vl.encode_field(:x, "r_01", type: :ordinal)
-    |> Vl.encode_field(:y, "p_01", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "pink")
-    |> Vl.encode_field(:x, "r_02", type: :ordinal)
-    |> Vl.encode_field(:y, "p_02", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "orange")
-    |> Vl.encode_field(:x, "r_03", type: :ordinal)
-    |> Vl.encode_field(:y, "p_03", type: :quantitative)
-  ])
-  |> KV.render()
-
-KV.push_many(chart, d4 ++ d4_bad ++ d4_good ++ d4_excellent)
-```
-
-```elixir
-d6_excellent =
-  Breathless.roll(6, position: :excellent)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_13: p, r_13: r} end)
-
-d6_good =
-  Breathless.roll(6, position: :good)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_12: p, r_12: r} end)
-
-d6_bad =
-  Breathless.roll(6, position: :bad)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_11: p, r_11: r} end)
-```
-
-```elixir
-chart =
-  Vl.new(width: 400, height: 400, title: "D6 & Positions")
-  |> Vl.layers([
-    Vl.new()
-    |> Vl.mark(:line, color: "lightgreen")
-    |> Vl.encode_field(:x, "r_1", type: :ordinal)
-    |> Vl.encode_field(:y, "p_1", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "green")
-    |> Vl.encode_field(:x, "r_11", type: :ordinal)
-    |> Vl.encode_field(:y, "p_11", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "pink")
-    |> Vl.encode_field(:x, "r_12", type: :ordinal)
-    |> Vl.encode_field(:y, "p_12", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "orange")
-    |> Vl.encode_field(:x, "r_13", type: :ordinal)
-    |> Vl.encode_field(:y, "p_13", type: :quantitative)
-  ])
-  |> KV.render()
-
-KV.push_many(chart, d6 ++ d6_bad ++ d6_good ++ d6_excellent)
-```
-
-```elixir
-  d8_excellent =
-    Breathless.roll(8, position: :excellent)
-    |> Enum.map(fn %{p: p, r: r} -> %{p_23: p, r_23: r} end)
-  
-  d8_good =
-    Breathless.roll(8, position: :good)
-    |> Enum.map(fn %{p: p, r: r} -> %{p_22: p, r_22: r} end)
-  
-  d8_bad =
-    Breathless.roll(8, position: :bad)
-    |> Enum.map(fn %{p: p, r: r} -> %{p_21: p, r_21: r} end)
-```
-
-```elixir
-chart =
-  Vl.new(width: 400, height: 400, title: "D8 & Positions")
-  |> Vl.layers([
-    Vl.new()
-    |> Vl.mark(:line, color: "lightgreen")
-    |> Vl.encode_field(:x, "r_2", type: :ordinal)
-    |> Vl.encode_field(:y, "p_2", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "green")
-    |> Vl.encode_field(:x, "r_21", type: :ordinal)
-    |> Vl.encode_field(:y, "p_21", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "pink")
-    |> Vl.encode_field(:x, "r_22", type: :ordinal)
-    |> Vl.encode_field(:y, "p_22", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "orange")
-    |> Vl.encode_field(:x, "r_23", type: :ordinal)
-    |> Vl.encode_field(:y, "p_23", type: :quantitative)
-  ])
-  |> KV.render()
-
-KV.push_many(chart, d8 ++ d8_bad ++ d8_good ++ d8_excellent)
-```
-
-```elixir
-d10_excellent =
-  Breathless.roll(10, position: :excellent)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_33: p, r_33: r} end)
-
-d10_good =
-  Breathless.roll(10, position: :good)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_32: p, r_32: r} end)
-
-d10_bad =
-  Breathless.roll(10, position: :bad)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_31: p, r_31: r} end)
-```
-
-```elixir
-chart =
-  Vl.new(width: 400, height: 400, title: "D10 & Positions")
-  |> Vl.layers([
-    Vl.new()
-    |> Vl.mark(:line, color: "lightgreen")
-    |> Vl.encode_field(:x, "r_3", type: :ordinal)
-    |> Vl.encode_field(:y, "p_3", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "green")
-    |> Vl.encode_field(:x, "r_31", type: :ordinal)
-    |> Vl.encode_field(:y, "p_31", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "pink")
-    |> Vl.encode_field(:x, "r_32", type: :ordinal)
-    |> Vl.encode_field(:y, "p_32", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "orange")
-    |> Vl.encode_field(:x, "r_33", type: :ordinal)
-    |> Vl.encode_field(:y, "p_33", type: :quantitative)
-  ])
-  |> KV.render()
-
-KV.push_many(chart, d10 ++ d10_bad ++ d10_good ++ d10_excellent)
-```
-
-```elixir
-d12_excellent =
-  Breathless.roll(12, position: :excellent)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_43: p, r_43: r} end)
-
-d12_good =
-  Breathless.roll(12, position: :good)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_42: p, r_42: r} end)
-
-d12_bad =
-  Breathless.roll(12, position: :bad)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_41: p, r_41: r} end)
-```
-
-```elixir
-chart =
-  Vl.new(width: 400, height: 400, title: "D12 & Positions")
-  |> Vl.layers([
-    Vl.new()
-    |> Vl.mark(:line, color: "lightgreen")
-    |> Vl.encode_field(:x, "r_4", type: :ordinal)
-    |> Vl.encode_field(:y, "p_4", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "green")
-    |> Vl.encode_field(:x, "r_41", type: :ordinal)
-    |> Vl.encode_field(:y, "p_41", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "pink")
-    |> Vl.encode_field(:x, "r_42", type: :ordinal)
-    |> Vl.encode_field(:y, "p_42", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "orange")
-    |> Vl.encode_field(:x, "r_43", type: :ordinal)
-    |> Vl.encode_field(:y, "p_43", type: :quantitative)
-  ])
-  |> KV.render()
-
-KV.push_many(chart, d12 ++ d12_bad ++ d12_good ++ d12_excellent)
-```
-
-## BitD
-
-```elixir
-bitd_1d6 =
-  BitD.roll(count: 1)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_1: p, r_1: r} end)
-
-bitd_2d6 =
-  BitD.roll(count: 2)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_2: p, r_2: r} end)
-
-bitd_3d6 =
-  BitD.roll(count: 3)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_3: p, r_3: r} end)
-
-bitd_4d6 =
-  BitD.roll(count: 4)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_4: p, r_4: r} end)
-
-bitd_5d6 =
-  BitD.roll(count: 5)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_5: p, r_5: r} end)
-```
-
-```elixir
-chart =
-  Vl.new(width: 400, height: 400, title: "BitD - Pool 1-5")
-  |> Vl.layers([
-    Vl.new()
-    |> Vl.mark(:line, color: "lightgreen")
-    |> Vl.encode_field(:x, "r_1", type: :ordinal)
-    |> Vl.encode_field(:y, "p_1", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "green")
-    |> Vl.encode_field(:x, "r_2", type: :ordinal)
-    |> Vl.encode_field(:y, "p_2", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "pink")
-    |> Vl.encode_field(:x, "r_3", type: :ordinal)
-    |> Vl.encode_field(:y, "p_3", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "orange")
-    |> Vl.encode_field(:x, "r_4", type: :ordinal)
-    |> Vl.encode_field(:y, "p_4", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "lightblue")
-    |> Vl.encode_field(:x, "r_5", type: :ordinal)
-    |> Vl.encode_field(:y, "p_5", type: :quantitative)
-  ])
-  |> KV.render()
-
-KV.push_many(chart, bitd_1d6 ++ bitd_2d6 ++ bitd_3d6 ++ bitd_4d6 ++ bitd_5d6)
+KV.push_many(chart, data)
 ```
 
 ## FATE
 
 ```elixir
-fate_0 =
-  Fate.roll(skill: 0)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_0: p, r_0: r} end)
+%{data: data, diagrams: diagrams, title: title} = Fate.run()
 
-fate_1 =
-  Fate.roll(skill: 1)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_1: p, r_1: r} end)
-
-fate_2 =
-  Fate.roll(skill: 2)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_2: p, r_2: r} end)
-
-fate_3 =
-  Fate.roll(skill: 3)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_3: p, r_3: r} end)
-
-fate_4 =
-  Fate.roll(skill: 4)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_4: p, r_4: r} end)
-  
-fate_5 =
-  Fate.roll(skill: 5)
-  |> Enum.map(fn %{p: p, r: r} -> %{p_5: p, r_5: r} end)
-```
-
-```elixir
 chart =
-  Vl.new(width: 400, height: 400, title: "FATE - Skill 0-5")
-  |> Vl.layers([
-    Vl.new()
-    |> Vl.mark(:line, color: "lightgreen")
-    |> Vl.encode_field(:x, "r_0", type: :ordinal)
-    |> Vl.encode_field(:y, "p_0", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "green")
-    |> Vl.encode_field(:x, "r_1", type: :ordinal)
-    |> Vl.encode_field(:y, "p_1", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "pink")
-    |> Vl.encode_field(:x, "r_2", type: :ordinal)
-    |> Vl.encode_field(:y, "p_2", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "orange")
-    |> Vl.encode_field(:x, "r_3", type: :ordinal)
-    |> Vl.encode_field(:y, "p_3", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "blue")
-    |> Vl.encode_field(:x, "r_4", type: :ordinal)
-    |> Vl.encode_field(:y, "p_4", type: :quantitative),
-    Vl.new()
-    |> Vl.mark(:line, color: "lightblue")
-    |> Vl.encode_field(:x, "r_5", type: :ordinal)
-    |> Vl.encode_field(:y, "p_5", type: :quantitative)
-  ])
+  Vl.new(width: 700, height: 400, title: title)
+  |> Vl.layers(diagrams)
   |> KV.render()
 
-KV.push_many(chart, fate_0 ++ fate_1 ++ fate_2 ++ fate_3 ++ fate_4 ++ fate_5)
+KV.push_many(chart, data)
+```
+
+## BitD
+
+```elixir
+%{data: data, diagrams: diagrams, title: title} = BitD.run()
+
+chart =
+  Vl.new(width: 700, height: 400, title: title)
+  |> Vl.layers(diagrams)
+  |> KV.render()
+
+KV.push_many(chart, data)
 ```
